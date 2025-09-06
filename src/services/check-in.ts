@@ -4,6 +4,9 @@ import { ResourceNotFoundError } from "./errors/resourceNotFound";
 import { CheckInRepository } from "../repositories/checkInsRepository";
 import { GymRepository } from "../repositories/gymsRepository";
 import { getDistanceBetweenCoordinates } from "../utils/get-distance-beetween-coordinates";
+import { MaxDistanceError } from "./errors/max-distance-error";
+import th from "zod/v4/locales/th.js";
+import { MaxNumberOfCheckInsError } from "./errors/max-number-of-check-ins-error";
 
 
 interface CheckInRequest {
@@ -41,13 +44,13 @@ export class CheckInService {
         const MAX_DISTANCE_IN_KILOMETERES = 0.1 // 100 metros
 
         if (distance > MAX_DISTANCE_IN_KILOMETERES) {
-            throw new Error("Você está muito longe da academia para fazer o check-in.")
+            throw new MaxDistanceError()
         }
 
         const checkInOnTheSameDate = await this.checkInRepository.findByUserIdOnDate(userId, new Date())
 
         if (checkInOnTheSameDate) {
-            throw new Error("User already checked in today")
+            throw new MaxNumberOfCheckInsError()
         }
 
         const checkIn = await this.checkInRepository.create({

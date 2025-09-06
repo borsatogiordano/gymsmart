@@ -4,6 +4,8 @@ import { InMemoryCheckInsRepository } from "../repositories/in-memory/in-memory-
 import { CheckInService } from "./check-in";
 import { InMemoryGymsRepository } from "../repositories/in-memory/in-memory-gyms-repository";
 import { Decimal } from "@prisma/client/runtime/library";
+import { MaxNumberOfCheckInsError } from "./errors/max-number-of-check-ins-error";
+import { MaxDistanceError } from "./errors/max-distance-error";
 
 describe("Register Service", () => {
 
@@ -64,10 +66,10 @@ describe("Register Service", () => {
                 userLatitude: -27.2092052,
                 userLongitude: -49.6401091
             })
-        }).rejects.toBeInstanceOf(Error);
+        }).rejects.toBeInstanceOf(MaxNumberOfCheckInsError);
     })
 
-    it("should not be able to check in twice in different days", async () => {
+    it("should be able to check in twice in different days", async () => {
 
         vi.setSystemTime(new Date(2022, 0, 20, 8, 0, 0))
 
@@ -107,6 +109,6 @@ describe("Register Service", () => {
             gymId: "gym-02",
             userLatitude: -27.2092052,
             userLongitude: -49.6401091
-        })).rejects.toBeInstanceOf(Error);
+        })).rejects.toBeInstanceOf(MaxDistanceError);
     })
 })
