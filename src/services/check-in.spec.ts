@@ -36,7 +36,7 @@ describe("Register Service", () => {
 
     it("should be able to check in", async () => {
 
-        const { checkIn } = await sut.create({
+        const { checkIn } = await sut.execute({
             userId: "user-01",
             gymId: "gym-01",
             userLatitude: -27.2092052,
@@ -52,7 +52,7 @@ describe("Register Service", () => {
 
         vi.setSystemTime(new Date(2022, 0, 20, 8, 0, 0))
 
-        const { checkIn } = await sut.create({
+        const { checkIn } = await sut.execute({
             userId: "user-01",
             gymId: "gym-01",
             userLatitude: -27.2092052,
@@ -60,7 +60,7 @@ describe("Register Service", () => {
         })
 
         await expect(async () => {
-            await sut.create({
+            await sut.execute({
                 userId: "user-01",
                 gymId: "gym-01",
                 userLatitude: -27.2092052,
@@ -73,7 +73,7 @@ describe("Register Service", () => {
 
         vi.setSystemTime(new Date(2022, 0, 20, 8, 0, 0))
 
-        await sut.create({
+        await sut.execute({
             userId: "user-01",
             gymId: "gym-01",
             userLatitude: -27.2092052,
@@ -82,7 +82,7 @@ describe("Register Service", () => {
 
         vi.setSystemTime(new Date(2022, 0, 21, 8, 0, 0))
 
-        const { checkIn } = await sut.create({
+        const { checkIn } = await sut.execute({
             userId: "user-01",
             gymId: "gym-01",
             userLatitude: -27.2092052,
@@ -104,7 +104,7 @@ describe("Register Service", () => {
         })
 
 
-        await expect(sut.create({
+        await expect(sut.execute({
             userId: "user-01",
             gymId: "gym-02",
             userLatitude: -27.2092052,

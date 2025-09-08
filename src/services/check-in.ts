@@ -24,7 +24,7 @@ export class CheckInService {
     ) { }
 
 
-    async create({
+    async execute({
         userId,
         gymId,
         userLatitude,
