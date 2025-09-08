@@ -1,6 +1,7 @@
 import { CheckIn } from "@prisma/client";
 import { CheckInRepository } from "../repositories/checkInsRepository";
 import { ResourceNotFoundError } from "./errors/resourceNotFound";
+import dayjs from "dayjs";
 
 interface ValidateCheckInRequest {
     checkInId: string;
@@ -23,6 +24,12 @@ export class ValidateCheckInService {
 
         if (!checkIn) {
             throw new ResourceNotFoundError();
+        }
+
+        const distanceInMinutesFromCreation = dayjs(new Date()).diff(checkIn.createdAt, "minute");
+
+        if (distanceInMinutesFromCreation > 20) {
+            throw new Error("The check-in can only be validated within 20 minutes of its creation.");
         }
 
         checkIn.validatedAt = new Date()
