@@ -7,7 +7,7 @@ export class PrismaUserRepository implements UserRepository {
 
     findById(id: string): Promise<User | null> {
         const user = prisma.user.findUnique({
-            where: { id }
+            where: { id: id }
         })
         return user
     }
@@ -26,5 +26,4 @@ export class PrismaUserRepository implements UserRepository {
         });
         return user
     }
-
 }

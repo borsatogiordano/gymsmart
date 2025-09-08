@@ -1,7 +1,7 @@
 import z from "zod";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { InvalidCredentialsError } from "../services/errors/invalidCredentialsError";
-import { makeAuthenticateUseCase } from "../services/factories/make-authenticate-use-case";
+import { InvalidCredentialsError } from "../../services/errors/invalidCredentialsError";
+import { makeAuthenticateUseCase } from "../../services/factories/make-authenticate-use-case";
 
 
 export async function authenticateUser(req: FastifyRequest, res: FastifyReply) {
@@ -14,12 +14,19 @@ export async function authenticateUser(req: FastifyRequest, res: FastifyReply) {
 
     try {
         const authenticateService = makeAuthenticateUseCase()
-        await authenticateService.execute({ email, password });
+        const { user } = await authenticateService.execute({ email, password });
+
+        const token = await res.jwtSign({
+
+            sub: user.id
+
+        });
+
+        return res.status(200).send({ token });
     } catch (error) {
         if (error instanceof InvalidCredentialsError) {
             return res.status(400).send({ message: error.message });
         }
         throw error;
     }
-    return res.status(200).send();
 }
